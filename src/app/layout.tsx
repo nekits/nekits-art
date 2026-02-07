@@ -8,31 +8,13 @@ const mono = JetBrains_Mono({
   display: "swap",
 });
 
+const baseUrl = "https://art.nekits.com";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(baseUrl),
   title: "nekits@art",
   description:
     "Terminal-aesthetic art portfolio. Фотографії, кураторські тексти, критика — все згенеровано ШІ, крім фото.",
-  openGraph: {
-    title: "nekits@art — WHITE RITUAL",
-    description:
-      "Веймаранер Руна в дівствінному снігу. Квінтесенція свободи — насолоджуватись зимою, а не виживати.",
-    type: "website",
-    images: [
-      {
-        url: "/og/og-white-ritual.png",
-        width: 2752,
-        height: 1536,
-        alt: "nekits@art — WHITE RITUAL",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "nekits@art — WHITE RITUAL",
-    description:
-      "Веймаранер Руна в дівствінному снігу. Свобода какати спокійно, коли нікого поруч і чуєш тільки сніжинки.",
-    images: ["/og/og-white-ritual.png"],
-  },
 };
 
 export default function RootLayout({

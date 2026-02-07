@@ -135,16 +135,12 @@ function FloatingGlyphs() {
   );
 }
 
-function getInitialIndex(): number {
-  if (typeof window === "undefined") return 0;
-  const path = window.location.pathname.replace(/^\//, "");
-  if (!path) return 0;
-  const idx = works.findIndex((w) => w.id === path);
-  return idx !== -1 ? idx : 0;
-}
-
-export default function Home() {
-  const [activeIndex, setActiveIndex] = useState(getInitialIndex);
+export default function Gallery({ initialWorkId }: { initialWorkId?: string }) {
+  const [activeIndex, setActiveIndex] = useState(() => {
+    if (!initialWorkId) return 0;
+    const idx = works.findIndex((w) => w.id === initialWorkId);
+    return idx !== -1 ? idx : 0;
+  });
   const [fading, setFading] = useState(false);
   const [titleHovered, setTitleHovered] = useState(false);
   const [showExhibition, setShowExhibition] = useState(false);
