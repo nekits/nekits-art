@@ -9,29 +9,29 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "nekits@art — BURNING CALM",
+  title: "nekits@art",
   description:
-    "Тріптіх, створений під час масованого обстрілу Києва. Три макрознімки побутових тканин — кольорові поля, що відсилають до Ротко. Палаючий спокій посеред хаосу.",
+    "Terminal-aesthetic art portfolio. Фотографії, кураторські тексти, критика — все згенеровано ШІ, крім фото.",
   openGraph: {
-    title: "nekits@art — BURNING CALM",
+    title: "nekits@art — WHITE RITUAL",
     description:
-      "Тріптіх, створений під час блекауту в Києві. Три погляди на один стан: коли зовнішній хаос зникає, залишається тільки тепло, текстура, лінія.",
+      "Веймаранер Руна в дівствінному снігу. Квінтесенція свободи — насолоджуватись зимою, а не виживати.",
     type: "website",
     images: [
       {
-        url: "/og/og-final.png",
+        url: "/og/og-white-ritual.png",
         width: 2752,
         height: 1536,
-        alt: "nekits@art — BURNING CALM",
+        alt: "nekits@art — WHITE RITUAL",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "nekits@art — BURNING CALM",
+    title: "nekits@art — WHITE RITUAL",
     description:
-      "Тріптіх, створений під час блекауту в Києві. Кольорові поля тканин як медитація посеред війни.",
-    images: ["/og/og-final.png"],
+      "Веймаранер Руна в дівствінному снігу. Свобода какати спокійно, коли нікого поруч і чуєш тільки сніжинки.",
+    images: ["/og/og-white-ritual.png"],
   },
 };
 
