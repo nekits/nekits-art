@@ -1,0 +1,498 @@
+:root {
+  --bg: #f5f5f5;
+  --text: #1a1a1a;
+  --text-dim: #888;
+  --text-mid: #555;
+  --accent: #1a1a1a;
+  --glow: rgba(0, 0, 0, 0.03);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  font-family: "JetBrains Mono", monospace;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+/* ==================== SCANLINES OVERLAY ==================== */
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.015) 2px,
+    rgba(0, 0, 0, 0.015) 4px
+  );
+}
+
+/* ==================== FLOATING GLYPHS ==================== */
+
+.glyphs {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.glyphs__item {
+  position: absolute;
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.04);
+  animation: glyphFloat linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes glyphFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(1);
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px) scale(0.8);
+  }
+}
+
+/* ==================== TERMINAL SHELL ==================== */
+
+.shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 48px 40px 80px;
+}
+
+/* ==================== PROMPT ==================== */
+
+.prompt {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 48px;
+  letter-spacing: 0.02em;
+}
+
+.prompt__user {
+  color: var(--text);
+}
+
+.prompt__cursor {
+  display: inline-block;
+  width: 8px;
+  height: 14px;
+  background: var(--text);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ==================== MAIN LAYOUT ==================== */
+
+.main {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+/* ==================== WORKS LIST (sidebar) ==================== */
+
+.sidebar__label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.works-list {
+  list-style: none;
+}
+
+.works-list__item {
+  padding: 6px 0;
+}
+
+.works-list__btn {
+  all: unset;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  letter-spacing: 0.01em;
+  transition: color 0.2s;
+  display: block;
+  width: 100%;
+}
+
+.works-list__btn:hover {
+  color: var(--text);
+}
+
+.works-list__btn--active {
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.works-list__marker {
+  display: inline-block;
+  width: 16px;
+  color: var(--text);
+}
+
+/* ==================== VIEWER ==================== */
+
+.viewer {
+  min-width: 0;
+}
+
+.viewer__label {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.viewer__title {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 10px;
+  letter-spacing: 0.1em;
+  position: relative;
+}
+
+/* Glitch double-layer on title — always active, stops on hover */
+.viewer__title::before,
+.viewer__title::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.viewer__title::before {
+  opacity: 0.6;
+  color: var(--text-dim);
+  animation: glitchShift1 0.3s steps(2) infinite;
+  clip-path: inset(20% 0 40% 0);
+}
+
+.viewer__title::after {
+  opacity: 0.6;
+  color: var(--text-dim);
+  animation: glitchShift2 0.3s steps(2) infinite;
+  clip-path: inset(60% 0 10% 0);
+}
+
+.viewer__title:hover::before,
+.viewer__title:hover::after {
+  opacity: 0;
+  animation: none;
+}
+
+@keyframes glitchShift1 {
+  0% { transform: translate(-2px, 0); }
+  50% { transform: translate(2px, 0); }
+  100% { transform: translate(-1px, 0); }
+}
+
+@keyframes glitchShift2 {
+  0% { transform: translate(2px, 0); }
+  50% { transform: translate(-2px, 0); }
+  100% { transform: translate(1px, 0); }
+}
+
+.viewer__meta {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-bottom: 32px;
+  line-height: 1.8;
+}
+
+/* ==================== VIEW TOGGLE ==================== */
+
+.view-toggle {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+.view-toggle__btn {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  padding: 4px;
+  opacity: 0.25;
+  transition: opacity 0.2s;
+}
+
+.view-toggle__btn:hover {
+  opacity: 0.5;
+}
+
+.view-toggle__btn--active {
+  opacity: 1;
+}
+
+.view-toggle__square {
+  display: block;
+  width: 8px;
+  height: 10px;
+  border: 1.5px solid var(--text);
+}
+
+.view-toggle__rect {
+  display: block;
+  width: 30px;
+  height: 10px;
+  border: 1.5px solid var(--text);
+}
+
+/* ==================== EXHIBITION VIEW ==================== */
+
+.exhibition {
+  margin-bottom: 56px;
+  overflow: hidden;
+  background: #e8e8e8;
+}
+
+.exhibition__img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==================== IMAGE GRID ==================== */
+
+.images {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 56px;
+}
+
+.images__item {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #e8e8e8;
+  position: relative;
+}
+
+/* Subtle scanline on each image */
+.images__item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(0, 0, 0, 0.02) 3px,
+    rgba(0, 0, 0, 0.02) 6px
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.images__item:hover::after {
+  opacity: 1;
+}
+
+.images__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.4s ease, filter 0.4s ease;
+}
+
+.images__item:hover .images__img {
+  filter: contrast(1.05) brightness(1.02);
+}
+
+/* ==================== TEXT BLOCKS ==================== */
+
+.textblock {
+  margin-bottom: 48px;
+}
+
+.textblock__header {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.textblock__header span {
+  color: var(--text-mid);
+}
+
+.textblock__body {
+  font-size: 0.82rem;
+  color: var(--text-mid);
+  line-height: 1.85;
+  max-width: 680px;
+}
+
+.textblock__body p {
+  margin-bottom: 1em;
+}
+
+.textblock__body p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==================== GLITCH NAME ==================== */
+
+.glitch-name {
+  display: inline;
+  color: var(--text);
+}
+
+/* ==================== REVIEWS ==================== */
+
+.reviews {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding-top: 48px;
+  margin-top: 8px;
+}
+
+.review {
+  margin-bottom: 40px;
+}
+
+.review:last-child {
+  margin-bottom: 0;
+}
+
+.review__header {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.review__body {
+  font-size: 0.82rem;
+  color: var(--text-mid);
+  line-height: 1.85;
+  max-width: 680px;
+}
+
+.review__body p {
+  margin-bottom: 1em;
+}
+
+.review__body p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==================== FOOTER ==================== */
+
+.footer {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+  line-height: 1.8;
+}
+
+.footer__disclaimer {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 860px) {
+  html {
+    font-size: 13px;
+  }
+
+  .shell {
+    padding: 32px 24px 60px;
+  }
+
+  .main {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .images {
+    gap: 6px;
+  }
+
+  .glyphs__item {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .shell {
+    padding: 24px 16px 48px;
+  }
+
+  .prompt {
+    margin-bottom: 32px;
+  }
+
+  .images {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .images__item {
+    aspect-ratio: 4 / 5;
+  }
+}
