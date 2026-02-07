@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Image from "next/image";
 import { works } from "@/data/works";
 
@@ -135,14 +135,42 @@ function FloatingGlyphs() {
   );
 }
 
+function getInitialIndex(): number {
+  if (typeof window === "undefined") return 0;
+  const path = window.location.pathname.replace(/^\//, "");
+  if (!path) return 0;
+  const idx = works.findIndex((w) => w.id === path);
+  return idx !== -1 ? idx : 0;
+}
+
 export default function Home() {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(getInitialIndex);
   const [fading, setFading] = useState(false);
   const [titleHovered, setTitleHovered] = useState(false);
   const [showExhibition, setShowExhibition] = useState(false);
+  const activeIndexRef = useRef(activeIndex);
+  activeIndexRef.current = activeIndex;
 
   const active = works[activeIndex];
   const glitchedTitle = useGlitchText(active.title, titleHovered);
+
+  // Handle browser back/forward
+  useEffect(() => {
+    const onPopState = () => {
+      const path = window.location.pathname.replace(/^\//, "");
+      const idx = path ? works.findIndex((w) => w.id === path) : 0;
+      const target = idx !== -1 ? idx : 0;
+      if (target !== activeIndexRef.current) {
+        setFading(true);
+        setTimeout(() => {
+          setActiveIndex(target);
+          setFading(false);
+        }, 200);
+      }
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
 
   const switchWork = useCallback(
     (index: number) => {
@@ -151,6 +179,7 @@ export default function Home() {
       setTimeout(() => {
         setActiveIndex(index);
         setFading(false);
+        window.history.pushState(null, "", `/${works[index].id}`);
       }, 200);
     },
     [activeIndex]
